@@ -49,11 +49,11 @@ export function renderHTML(body, pLink, pIdx) {
       <script src="https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js"></script>
     </head>
     <body>
-      <nav id="navbar" data-turbolinks-permanent><div class="brand">📁 Spencer's OneDrive Index</div></nav>
+      <nav id="navbar" data-turbolinks-permanent><div class="brand">📁 yangchm's public onedrive</div></nav>
       ${body}
       <div class="paginate-container">${pagination(pIdx)}</div>
       <div id="flex-container" data-turbolinks-permanent style="flex-grow: 1;"></div>
-      <footer id="footer" data-turbolinks-permanent><p>Powered by <a href="https://github.com/spencerwooo/onedrive-cf-index">onedrive-cf-index</a>, hosted on <a href="https://www.cloudflare.com/products/cloudflare-workers/">Cloudflare Workers</a>.</p></footer>
+      <footer id="footer" data-turbolinks-permanent><p>By yangchm, hosted on cf.</p></footer>
       <script>
         if (typeof ap !== "undefined" && ap.paused !== true) {
           ap.destroy()

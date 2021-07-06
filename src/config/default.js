@@ -18,7 +18,7 @@ const config = {
   },
 
   refresh_token: REFRESH_TOKEN,
-  client_id: '6600e358-9328-4050-af82-0af9cdde796b',
+  client_id: 'e56f2a48-a514-4b1f-9e0d-cb305d9a191b',
   client_secret: CLIENT_SECRET,
 
   /**
@@ -62,7 +62,7 @@ const config = {
     enable: true,
     entireFileCacheLimit: 10000000, // 10MB
     chunkedCacheLimit: 100000000, // 100MB
-    previewCache: false,
+    previewCache: true,
     paths: ['/🥟%20Some%20test%20files/Previews']
   },
 
