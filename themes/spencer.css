@@ -170,6 +170,26 @@ a.item:hover {
   animation: fade-out-bck 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
+#play-list {
+  position: fixed;
+  top: 100px;
+  right: 0;
+  width: 800px;
+  color: #03a0d6;
+  background-color: #1e2a2e;
+}
+
+#play-list > li {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+#play-list > li:hover {
+  color: #e5abab;
+}
+
 @-webkit-keyframes fade-in-bottom {
   0% {
     -webkit-transform: translateY(50px);
@@ -310,3 +330,4 @@ a.item:hover {
     color: #89befa !important;
   }
 }
+

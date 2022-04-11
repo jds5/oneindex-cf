@@ -56,7 +56,7 @@ export async function renderFolderView(items, path, request) {
   // Check if current directory contains README.md, if true, then render spinner
   let readmeExists = false
   let readmeFetchUrl = ''
-
+  const currentVideoFiles = []
   const body = div(
     'container',
     div('path', renderPath(path)) +
@@ -103,6 +103,9 @@ export async function renderFolderView(items, path, request) {
               } else {
                 fileIcon = `far ${fileIcon}`
               }
+              if (fileIcon === 'far fa-file-video') {
+                currentVideoFiles.push(`${path}${i.name}`)
+              }
               return item(fileIcon, i.name, `${path}${i.name}`, i.size)
             } else {
               console.log(`unknown item type ${i}`)
@@ -114,5 +117,6 @@ export async function renderFolderView(items, path, request) {
     (readmeExists && !isIndex ? await renderMarkdown(readmeFetchUrl, 'fade-in-fwd', '') : '') +
     (isIndex ? intro : '')
   )
-  return renderHTML(body, ...[request.pLink, request.pIdx])
+
+  return renderHTML(body, ...[request.pLink, request.pIdx], currentVideoFiles)
 }

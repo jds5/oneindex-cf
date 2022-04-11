@@ -124,6 +124,7 @@ function renderImage(file) {
  */
 function renderVideoPlayer(file, fileExt) {
   return `<div id="dplayer"></div>
+          <div id="paly-list" style="position: fixed; right: 0"></div>
           <script>
           dp = new DPlayer({
             container: document.getElementById('dplayer'),
@@ -132,6 +133,19 @@ function renderVideoPlayer(file, fileExt) {
               url: '${file['@microsoft.graph.downloadUrl']}',
               type: '${fileExt}'
             }
+          })
+          dp.on("ended", function(){
+            console.log("end")
+          })
+          let cVideoList = JSON.parse(localStorage.getItem('videoItems'))
+          let plist = document.getElementById('paly-list')
+          cVideoList.map(e=>{
+            let li = document.createElement("li")
+            li.innerHTML = e
+            li.onclick = ()=>{
+              console.log(e)
+            }
+            plist.appendChild(li)
           })
           </script>`
 }

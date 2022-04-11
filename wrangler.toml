@@ -1,5 +1,6 @@
 name = "onedrive"
 type = "webpack"
+compatibility_date = "2022-04-11"
 workers_dev = true
 account_id = "19d1ee21414091dfeb1ee5bf64c4f1ef"
 zone_id = "223bde47ebc44c313979b308e58a1d49"
