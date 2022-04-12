@@ -171,12 +171,13 @@ a.item:hover {
 }
 
 #play-list {
-  position: fixed;
   top: 100px;
   right: 0;
-  width: 800px;
   color: #03a0d6;
   background-color: #1e2a2e;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 #play-list > li {
@@ -184,6 +185,7 @@ a.item:hover {
   text-overflow: ellipsis;
   overflow: hidden;
   margin-top: 10px;
+  list-style: none;
 }
 
 #play-list > li:hover {

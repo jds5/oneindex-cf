@@ -104,7 +104,18 @@ export async function renderFolderView(items, path, request) {
                 fileIcon = `far ${fileIcon}`
               }
               if (fileIcon === 'far fa-file-video') {
-                currentVideoFiles.push(`${path}${i.name}`)
+                /**
+                 *  video: {
+              url: '${file['@microsoft.graph.downloadUrl']}',
+              type: '${fileExt}'
+            }
+                 * @type {{name, id: string}}
+                 */
+                const videoObj = {
+                  url: `${i['@microsoft.graph.downloadUrl']}`,
+                  file: `${path}${i.name}`
+                }
+                currentVideoFiles.push(videoObj)
               }
               return item(fileIcon, i.name, `${path}${i.name}`, i.size)
             } else {

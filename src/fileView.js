@@ -124,7 +124,7 @@ function renderImage(file) {
  */
 function renderVideoPlayer(file, fileExt) {
   return `<div id="dplayer"></div>
-          <div id="paly-list" style="position: fixed; right: 0"></div>
+          <div id="play-list" style="position: fixed; right: 0"></div>
           <script>
           dp = new DPlayer({
             container: document.getElementById('dplayer'),
@@ -137,15 +137,25 @@ function renderVideoPlayer(file, fileExt) {
           dp.on("ended", function(){
             console.log("end")
           })
-          let cVideoList = JSON.parse(localStorage.getItem('videoItems'))
-          let plist = document.getElementById('paly-list')
-          cVideoList.map(e=>{
+          currentFile = file.name
+          JSON.parse(localStorage.getItem('videoItems')).map(e=>{
             let li = document.createElement("li")
-            li.innerHTML = e
-            li.onclick = ()=>{
-              console.log(e)
+            let videoName = e.file.split("/").pop()
+            li.innerHTML = videoName
+            if(videoName === currentFile){
+                li.style.color = '#b0ebff'    
             }
-            plist.appendChild(li)
+            li.onclick = ()=>{
+               if(videoName!==currentFile){
+                   currentFile = videoName
+                    dp.switchVideo(
+                        {url: e.url}
+                    );
+                    dp.play()
+               }
+            }
+           
+            document.getElementById('play-list').appendChild(li)
           })
           </script>`
 }

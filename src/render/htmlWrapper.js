@@ -1,6 +1,6 @@
 import { favicon } from './favicon'
 
-const COMMIT_HASH = 'c805bab'
+const COMMIT_HASH = '36073ff'
 
 const pagination = (pIdx, attrs) => {
   const getAttrs = (c, h, isNext) =>
@@ -36,9 +36,9 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
       <title>yangchm's OneDrive</title>
       <link rel="shortcut icon" type="image/png" sizes="16x16" href="${favicon}" />
       <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.min.css" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/gh/jds5/oneindex-cf/themes/spencer.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/gh/jds5/oneindex-cf@${COMMIT_HASH}/themes/spencer.css" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css@gh-pages/github-markdown.css" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/gh/jds5/oneindex-cf/themes/prism-github.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/gh/jds5/oneindex-cf@${COMMIT_HASH}/themes/prism-github.css" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/prismjs@1.17.1/prism.min.js" data-manual></script>
       <script src="https://cdn.jsdelivr.net/npm/prismjs@1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
