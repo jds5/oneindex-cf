@@ -1,6 +1,6 @@
 import { favicon } from './favicon'
 
-const COMMIT_HASH = '46e1563'
+const COMMIT_HASH = 'b91e72d'
 
 const pagination = (pIdx, attrs) => {
   const getAttrs = (c, h, isNext) =>
