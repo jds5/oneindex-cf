@@ -54,6 +54,7 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
       ${body}
       <div class="paginate-container">${pagination(pIdx)}</div>
       <div id="flex-container" data-turbolinks-permanent style="flex-grow: 1;"></div>
+      <a id="lastest-video" style=""></a>
       <footer id="footer" data-turbolinks-permanent><p>By yangchm, hosted on cf.</p></footer>
       <script>
         if (typeof ap !== "undefined" && ap.paused !== true) {
@@ -63,6 +64,12 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
         if (typeof dp !== "undefined" && dp.paused !== true) {
           dp.destroy()
           dp = undefined
+        }
+        console.log('start')
+        if(localStorage.getItem('latestVideoPath')){
+          latestVideo = document.getElementById('lastest-video')
+          latestVideo.innerHTML = decodeURI(localStorage.getItem('latestVideoPath')).split("/").pop()
+          latestVideo.href = 'https://onedrive.megumi.ml/'+localStorage.getItem('latestVideoPath')
         }
         Prism.highlightAll()
         mediumZoom('[data-zoomable]')

@@ -122,7 +122,7 @@ function renderImage(file) {
  * @param {Object} file Object representing the video to preview
  * @param {string} fileExt The file extension parsed
  */
-function renderVideoPlayer(file, fileExt) {
+function renderVideoPlayer(file, fileExt, path) {
   return `<div id="dplayer"></div>
           <div id="play-list"></div>
           <script>
@@ -134,6 +134,7 @@ function renderVideoPlayer(file, fileExt) {
               type: '${fileExt}'
             }
           })
+          localStorage.setItem('latestVideoPath', '${path}')
           dp.on("ended", function(){
             console.log("end")
           })
@@ -151,6 +152,7 @@ function renderVideoPlayer(file, fileExt) {
                    let hasNodes = document.getElementsByClassName('play-list-choose-one')
                    hasNodes.length>0&&hasNodes[0].classList.remove('play-list-choose-one')
                    ele.target.className = 'play-list-choose-one'
+                   localStorage.setItem('latestVideoFullPath', e.file)
                     dp.switchVideo(
                         {url: e.url}
                     );
@@ -199,7 +201,7 @@ function renderUnsupportedView(fileExt) {
  * @param {Object} file Object representing the file to preview
  * @param {string} fileExt The file extension parsed
  */
-async function renderPreview(file, fileExt, cacheUrl) {
+async function renderPreview(file, fileExt, cacheUrl, path) {
   if (cacheUrl) {
     // This will change your download url too! (proxied download)
     file['@microsoft.graph.downloadUrl'] = cacheUrl
@@ -222,7 +224,7 @@ async function renderPreview(file, fileExt, cacheUrl) {
       return renderPDFPreview(file)
 
     case preview.video:
-      return renderVideoPlayer(file, fileExt)
+      return renderVideoPlayer(file, fileExt, path)
 
     case preview.audio:
       return renderAudioPlayer(file)
@@ -239,7 +241,7 @@ export async function renderFilePreview(file, path, fileExt, cacheUrl) {
   const body = div(
     'container',
     div('path', renderPath(path) + ` / ${file.name}`) +
-      div('items', el('div', ['style="padding: 1rem 1rem;"'], await renderPreview(file, fileExt, cacheUrl))) +
+      div('items', el('div', ['style="padding: 1rem 1rem;"'], await renderPreview(file, fileExt, cacheUrl, path))) +
       div(
         'download-button-container',
         el(

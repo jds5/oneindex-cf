@@ -50,7 +50,7 @@ export async function renderFolderView(items, path, request) {
     )
 
   const intro = `<div class="intro markdown-body" style="text-align: left; margin-top: 2rem;">
-                        <h2>HELLO</h2>
+                        <h2>最近播放视频</h2>
                   </div>`
 
   // Check if current directory contains README.md, if true, then render spinner
