@@ -39,14 +39,14 @@ export async function renderFolderView(items, path, request) {
 
   const el = (tag, attrs, content) => `<${tag} ${attrs.join(' ')}>${content}</${tag}>`
   const div = (className, content) => el('div', [`class=${className}`], content)
-  const item = (icon, fileName, fileAbsoluteUrl, size, emojiIcon) =>
+  const item = (icon, fileName, fileAbsoluteUrl, size, emojiIcon, count) =>
     el(
       'a',
       [`href="${fileAbsoluteUrl}"`, 'class="item"', size ? `size="${size}"` : ''],
       (emojiIcon ? el('i', ['style="font-style: normal"'], emojiIcon) : el('i', [`class="${icon}"`], '')) +
       fileName +
       el('div', ['style="flex-grow: 1;"'], '') +
-      (fileName === '..' ? '' : el('span', ['class="size"'], readableFileSize(size)))
+      (fileName === '..' ? '' : el('span', ['class="size"'], count ? `${count} files/` + readableFileSize(size) : readableFileSize(size)))
     )
 
   const intro = `<div class="intro markdown-body" style="text-align: left; margin-top: 2rem;">
@@ -72,9 +72,9 @@ export async function renderFolderView(items, path, request) {
             if ('folder' in i) {
               const emoji = emojiRegex().exec(i.name)
               if (emoji && !emoji.index) {
-                return item('', i.name.replace(emoji, '').trim(), `${path}${i.name}/`, i.size, emoji[0])
+                return item('', i.name.replace(emoji, '').trim(), `${path}${i.name}/`, i.size, emoji[0], i.folder.childCount)
               } else {
-                return item('far fa-folder', i.name, `${path}${i.name}/`, i.size)
+                return item('far fa-folder', i.name, `${path}${i.name}/`, i.size, null, i.folder.childCount)
               }
             } else if ('file' in i) {
               // Check if README.md exists

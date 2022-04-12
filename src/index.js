@@ -130,7 +130,6 @@ async function handleRequest(request) {
   if (paginationLink && paginationLink !== 'undefined') {
     url += `&$skiptoken=${paginationLink}`
   }
-
   const resp = await fetch(url, {
     headers: {
       Authorization: `bearer ${accessToken}`

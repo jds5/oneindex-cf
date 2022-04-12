@@ -56,6 +56,7 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
       <div id="flex-container" data-turbolinks-permanent style="flex-grow: 1;"></div>
       <a id="lastest-video" style=""></a>
       <footer id="footer" data-turbolinks-permanent><p>By yangchm, hosted on cf.</p></footer>
+      <a href="http://www.baidu.com" style="position:fixed;top:90px;right:50px">去下载</a>
       <script>
         if (typeof ap !== "undefined" && ap.paused !== true) {
           ap.destroy()
