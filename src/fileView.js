@@ -124,7 +124,7 @@ function renderImage(file) {
  */
 function renderVideoPlayer(file, fileExt) {
   return `<div id="dplayer"></div>
-          <div id="play-list" style="position: fixed; right: 0"></div>
+          <div id="play-list"></div>
           <script>
           dp = new DPlayer({
             container: document.getElementById('dplayer'),
@@ -137,17 +137,20 @@ function renderVideoPlayer(file, fileExt) {
           dp.on("ended", function(){
             console.log("end")
           })
-          currentFile = file.name
+          currentFile = '${file.name}'
           JSON.parse(localStorage.getItem('videoItems')).map(e=>{
             let li = document.createElement("li")
             let videoName = e.file.split("/").pop()
             li.innerHTML = videoName
             if(videoName === currentFile){
-                li.style.color = '#b0ebff'    
+                li.className = 'play-list-choose-one'    
             }
-            li.onclick = ()=>{
-               if(videoName!==currentFile){
-                   currentFile = videoName
+            li.onclick = (ele)=>{
+                console.log(ele)
+               if(ele.target.className !== 'play-list-choose-one'){
+                   let hasNodes = document.getElementsByClassName('play-list-choose-one')
+                   hasNodes.length>0&&hasNodes[0].classList.remove('play-list-choose-one')
+                   ele.target.className = 'play-list-choose-one'
                     dp.switchVideo(
                         {url: e.url}
                     );
@@ -157,7 +160,7 @@ function renderVideoPlayer(file, fileExt) {
            
             document.getElementById('play-list').appendChild(li)
           })
-          </script>`
+          </script><style>.play-list-choose-one{color: #b9edff}</style>`
 }
 
 /**

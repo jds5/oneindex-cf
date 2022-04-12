@@ -57,7 +57,8 @@ function wrapPathName(pathname, isRequestFolder) {
 }
 
 async function handleRequest(request) {
-  if (config.cache && config.cache.enable) {
+  const isRequestNewUrl = request.url.endsWith('getNewFileUrl')
+  if (config.cache && config.cache.enable && !isRequestNewUrl) {
     const maybeResponse = await cache.match(request)
     if (maybeResponse) return maybeResponse
   }
@@ -74,6 +75,7 @@ async function handleRequest(request) {
   const rawFile = searchParams.get('raw') !== null
   const thumbnail = config.thumbnail ? searchParams.get('thumbnail') : false
   const proxied = config.proxyDownload ? searchParams.get('proxied') !== null : false
+  const requestFilePath = searchParams.get('filePath')
 
   if (thumbnail) {
     const url = `${config.apiEndpoint.graph}${config.baseResource}/root${wrapPathName(
@@ -96,6 +98,30 @@ async function handleRequest(request) {
       ? '/children' + (config.pagination.enable && config.pagination.top ? `?$top=${config.pagination.top}` : '')
       : '?select=%40microsoft.graph.downloadUrl,name,size,file'
   }`
+  if (isRequestNewUrl) {
+    url = `${config.apiEndpoint.graph}${config.baseResource}/root${wrapPathName(requestFilePath, false)}?select=%40microsoft.graph.downloadUrl,name,size,file`
+    const newFileResp = await fetch(url, {
+      headers: {
+        Authorization: `bearer ${accessToken}`
+      }
+    })
+    if (newFileResp.ok) {
+      const data = await newFileResp.json()
+      return new Response(data['@microsoft.graph.downloadUrl'], {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      })
+    } else {
+      return new Response('error', {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      })
+    }
+  }
 
   // get & set {pLink ,pIdx} for fetching and paging
   const paginationLink = request.headers.get('pLink')
