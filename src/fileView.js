@@ -152,7 +152,7 @@ function renderVideoPlayer(file, fileExt, path) {
                    let hasNodes = document.getElementsByClassName('play-list-choose-one')
                    hasNodes.length>0&&hasNodes[0].classList.remove('play-list-choose-one')
                    ele.target.className = 'play-list-choose-one'
-                   localStorage.setItem('latestVideoFullPath', e.file)
+                   localStorage.setItem('latestVideoPath', e.file)
                     dp.switchVideo(
                         {url: e.url}
                     );
