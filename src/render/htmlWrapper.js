@@ -66,12 +66,36 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
           dp.destroy()
           dp = undefined
         }
-        console.log('start')
-        if(localStorage.getItem('latestVideoPath')){
-          latestVideo = document.getElementById('lastest-video')
-          latestVideo.innerHTML = decodeURI(localStorage.getItem('latestVideoPath')).split("/").pop()
-          latestVideo.href = 'https://onedrive.megumi.ml/'+localStorage.getItem('latestVideoPath')
+        
+        function loadHistory(){
+          let url = location.pathname
+          let saveLatestVideos = localStorage.getItem('latestVideoPath')
+          if(false){//url === "/"
+              if(saveLatestVideos){
+                let saveObj = JSON.parse(saveLatestVideos)
+                console.log(saveObj)
+                // Object.keys(saveObj).map(key=>{
+                //     saveObj[key]
+                // })
+                // latestVideo = document.getElementById('lastest-video')
+                // latestVideo.innerHTML = decodeURI(localStorage.getItem('latestVideoPath')).split("/").pop()
+                // latestVideo.href = 'https://onedrive.megumi.ml/'+localStorage.getItem('latestVideoPath')
+              }
+          }else{
+              url = url.endsWith("/")?url.substr(0, url.length-1):url
+              if(saveLatestVideos){
+                let saveObj = JSON.parse(saveLatestVideos)
+                let targetVideo = saveObj[url]
+                if(targetVideo){
+                  let latestVideo = document.getElementById('lastest-video')
+                  latestVideo.innerHTML = decodeURI(targetVideo).split("/").pop()
+                  latestVideo.href = 'https://onedrive.megumi.ml/'+targetVideo
+                }
+              }
+          }
         }
+        loadHistory()
+        
         Prism.highlightAll()
         mediumZoom('[data-zoomable]')
         Turbolinks.Location.prototype.isHTML = () => {return true}
