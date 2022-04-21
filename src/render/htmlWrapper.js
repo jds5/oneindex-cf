@@ -50,13 +50,16 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
       <script src="https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js"></script>
     </head>
     <body>
-      <nav id="navbar" data-turbolinks-permanent><div class="brand">📁 yangchm's public onedrive</div></nav>
+      <nav id="navbar" data-turbolinks-permanent>
+        <div class="brand">📁 yangchm's public onedrive</div>
+        <a href="https://down.megumi.ml" target="_blank" style="display: block; text-align: right; flex: 1;">aria2</a>
+        <a href="https://nyaa.si/?f=0&c=1_3&q=" target="_blank" style="display: block; margin-left: 10px; margin-right: 10px;">nyaa</a>
+      </nav>
       ${body}
       <div class="paginate-container">${pagination(pIdx)}</div>
-      <div id="flex-container" data-turbolinks-permanent style="flex-grow: 1;"></div>
+        <div id="flex-container" data-turbolinks-permanent style="flex-grow: 1;"></div>
       <a id="lastest-video" style=""></a>
       <footer id="footer" data-turbolinks-permanent><p>By yangchm, hosted on cf.</p></footer>
-      <a href="https://down.megumi.ml" target="_blank" style="position:fixed;top:90px;right:50px">去下载</a>
       <script>
         if (typeof ap !== "undefined" && ap.paused !== true) {
           ap.destroy()
