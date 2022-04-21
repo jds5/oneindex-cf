@@ -65,7 +65,23 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
           ap.destroy()
           ap = undefined
         }
+        
+        function beforeDestroy(){
+           let route = localStorage.getItem('currentVideoPath')
+            let saveObj = JSON.parse(localStorage.getItem('latestVideoPath')||'{}')
+            let element = saveObj[route]
+            if(element){
+                let lastTime = parseInt(element.split("/").pop().split(".").pop())
+                if(!isNaN(lastTime)){
+                  element = element.substr(0, element.lastIndexOf('.'))
+                }
+                saveObj[route] = element+"."+parseInt(dp.video.currentTime)
+            }
+            localStorage.setItem('latestVideoPath', JSON.stringify(saveObj))
+        }
+        
         if (typeof dp !== "undefined" && dp.paused !== true) {
+          beforeDestroy()
           dp.destroy()
           dp = undefined
         }
@@ -90,6 +106,10 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
                 let saveObj = JSON.parse(saveLatestVideos)
                 let targetVideo = saveObj[url]
                 if(targetVideo){
+                  let lastTime = parseInt(targetVideo.split("/").pop().split(".").pop())
+                  if(!isNaN(lastTime)){
+                    targetVideo = targetVideo.substr(0, targetVideo.lastIndexOf('.'))
+                  }
                   let latestVideo = document.getElementById('lastest-video')
                   latestVideo.innerHTML = decodeURI(targetVideo).split("/").pop()
                   latestVideo.href = 'https://onedrive.megumi.ml/'+targetVideo

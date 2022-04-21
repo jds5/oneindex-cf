@@ -137,41 +137,63 @@ function renderVideoPlayer(file, fileExt, path) {
           console.log("haha")
           function updateLastestVideo(updatePath){
               let savedList = localStorage.getItem('latestVideoPath')||'{}'
-              console.log(savedList)
               let route = updatePath.substr(0, updatePath.lastIndexOf("/"))
+              let newFName = updatePath.split("/").pop()
               let saveObj = JSON.parse(savedList)
+              console.log("try load last play time1")
+              if(saveObj[route]){
+                //123.mkv.2 or 123.mkv
+                let fname = saveObj[route].split("/").pop()
+                let lastTime = parseInt(fname.split(".").pop())
+                console.log(newFName)
+                console.log(lastTime)
+                console.log(fname.substr(0, fname.lastIndexOf('.')))
+                if(newFName===fname.substr(0, fname.lastIndexOf('.'))&&!isNaN(lastTime)){
+                 console.log("try load last play time")
+                  dp.seek(lastTime)
+                }
+              }
               saveObj[route] = updatePath
               localStorage.setItem('latestVideoPath', JSON.stringify(saveObj))
           }
-          updateLastestVideo('${path}')
-          //localStorage.setItem('latestVideoPath', '${path}')
+          
+          function initVideoPage(){
+            localStorage.setItem('currentVideoPath', '${path}'.substr(0, '${path}'.lastIndexOf("/")))
+            updateLastestVideo('${path}')
+            let currentFile = '${file.name}'
+            JSON.parse(localStorage.getItem('videoItems')).map(e=>{
+              let li = document.createElement("li")
+              let videoName = e.file.split("/").pop()
+              li.innerHTML = videoName
+              if(videoName === currentFile){
+                  li.className = 'play-list-choose-one'    
+              }
+              li.onclick = (ele)=>{
+                  console.log(ele)
+                 if(ele.target.className !== 'play-list-choose-one'){
+                     let hasNodes = document.getElementsByClassName('play-list-choose-one')
+                     hasNodes.length>0&&hasNodes[0].classList.remove('play-list-choose-one')
+                     ele.target.className = 'play-list-choose-one'
+                     updateLastestVideo(e.file)
+                      dp.switchVideo(
+                          {url: e.url}
+                      );
+                      dp.play()
+                 }
+              }
+              document.getElementById('play-list').appendChild(li)
+            })
+          }
+          initVideoPage()
           dp.on("ended", function(){
-            console.log("end")
-          })
-          currentFile = '${file.name}'
-          JSON.parse(localStorage.getItem('videoItems')).map(e=>{
-            let li = document.createElement("li")
-            let videoName = e.file.split("/").pop()
-            li.innerHTML = videoName
-            if(videoName === currentFile){
-                li.className = 'play-list-choose-one'    
+            let hasNodes = document.querySelector('.play-list-choose-one + li')
+            if(hasNodes){
+              let e =  document.createEvent('mouseEvent')
+              e.initEvent('click', true, true)
+              hasNodes.dispatchEvent(e)  
             }
-            li.onclick = (ele)=>{
-                console.log(ele)
-               if(ele.target.className !== 'play-list-choose-one'){
-                   let hasNodes = document.getElementsByClassName('play-list-choose-one')
-                   hasNodes.length>0&&hasNodes[0].classList.remove('play-list-choose-one')
-                   ele.target.className = 'play-list-choose-one'
-                   //localStorage.setItem('latestVideoPath', e.file)
-                    dp.switchVideo(
-                        {url: e.url}
-                    );
-                    dp.play()
-               }
-            }
-           
-            document.getElementById('play-list').appendChild(li)
           })
+          
           </script><style>.play-list-choose-one{color: #b9edff}</style>`
 }
 
