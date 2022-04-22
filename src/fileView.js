@@ -150,7 +150,9 @@ function renderVideoPlayer(file, fileExt, path) {
                 console.log(fname.substr(0, fname.lastIndexOf('.')))
                 if(newFName===fname.substr(0, fname.lastIndexOf('.'))&&!isNaN(lastTime)){
                  console.log("try load last play time")
-                  dp.seek(lastTime)
+                  dp.on("canplay", function(){
+                    dp.seek(lastTime)
+                  })
                 }
               }
               saveObj[route] = updatePath
