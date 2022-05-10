@@ -151,6 +151,7 @@ function renderVideoPlayer(file, fileExt, path) {
               }
               saveObj[route] = updatePath
               localStorage.setItem('latestVideoPath', JSON.stringify(saveObj))
+              localStorage.setItem('nowPlaying', newFName)
           }
           
           function initVideoPage(){
@@ -252,10 +253,8 @@ function renderVideoPlayer(file, fileExt, path) {
                           //console.log('跳过非正文行',line);
                           continue;
                       }
-                      let minutes = match[3]?match[3].split("."):[];
-                      let minutes2 = match[6]?match[6].split("."):[];
-                      let newLine = begin+"\\r\\n"+"0"+match[1] + ":" + match[2] + ":" + minutes.join(",")+" --> " 
-                      + "0"+match[4] + ":" + match[5] + ":" + minutes2.join(",") + "\\r\\n" + match[7]
+                      let newLine = begin+"\\r\\n"+"0"+match[1] + ":" + match[2] + ":" + match[3]+"0 --> " 
+                      + "0"+match[4] + ":" + match[5] + ":" + match[6] + "0\\r\\n" + (match[7]?match[7].trim().replace(/{\\\\.+?}/g,'').replace(/\\\\N/gi,'\\n').replace(/\\\\h/g,' '):"")
                       begin = begin+1
                       data.push(newLine)
                 }
@@ -310,11 +309,24 @@ function renderVideoPlayer(file, fileExt, path) {
                   }
               };
           };
-            vttItems&&JSON.parse(vttItems).map(e=>{
+              let searchSt = true;
+            //移除字幕
+            let video = document.getElementsByClassName("dplayer-video")[0];
+            if(video){
+              if(video.textTracks&&video.textTracks.length>0){
+                video.textTracks[0].mode = 'disabled'
+              }
+              video.innerHTML = '';
+            }
+            vttItems&&JSON.parse(vttItems).forEach(e=>{
               let vttName = e.file.split("/").pop()
               let vttNameArr = vttName.split(".");
               let endfix = vttNameArr[vttNameArr.length-1];
-              if(vttName.split(".")[0] === currentFile.split(".")[0]){
+              let nowPlaying = localStorage.getItem('nowPlaying')
+              nowPlaying = nowPlaying?nowPlaying:"";
+              let nowCompare = decodeURI(nowPlaying);
+              if(searchSt&&vttName.startsWith(nowCompare.substr(0, nowCompare.lastIndexOf(".")))){
+                searchSt = false;
                   $.ajax({
                     type:'GET',
                     url:e.url,
