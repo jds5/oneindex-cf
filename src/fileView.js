@@ -134,22 +134,16 @@ function renderVideoPlayer(file, fileExt, path) {
               type: '${fileExt}'
             }
           })
-          console.log("haha")
           function updateLastestVideo(updatePath){
               let savedList = localStorage.getItem('latestVideoPath')||'{}'
               let route = updatePath.substr(0, updatePath.lastIndexOf("/"))
               let newFName = updatePath.split("/").pop()
               let saveObj = JSON.parse(savedList)
-              console.log("try load last play time1")
               if(saveObj[route]){
                 //123.mkv.2 or 123.mkv
                 let fname = saveObj[route].split("/").pop()
                 let lastTime = parseInt(fname.split(".").pop())
-                console.log(newFName)
-                console.log(lastTime)
-                console.log(fname.substr(0, fname.lastIndexOf('.')))
                 if(newFName===fname.substr(0, fname.lastIndexOf('.'))&&!isNaN(lastTime)){
-                 console.log("try load last play time")
                   dp.on("canplay", function(){
                     dp.seek(lastTime)
                   })
@@ -171,7 +165,6 @@ function renderVideoPlayer(file, fileExt, path) {
                   li.className = 'play-list-choose-one'    
               }
               li.onclick = (ele)=>{
-                  console.log(ele)
                  if(ele.target.className !== 'play-list-choose-one'){
                      let hasNodes = document.getElementsByClassName('play-list-choose-one')
                      hasNodes.length>0&&hasNodes[0].classList.remove('play-list-choose-one')
@@ -194,6 +187,118 @@ function renderVideoPlayer(file, fileExt, path) {
               e.initEvent('click', true, true)
               hasNodes.dispatchEvent(e)  
             }
+          })
+          dp.on("loadedmetadata", function(e){
+            console.log(e)
+          })
+          
+          dp.on("loadstart", function(){
+            let currentFile = '${file.name}'
+            let vttItems = localStorage.getItem('vttItems');
+            
+            const loadedCb = (event) => {
+              const buf = (event.target).result;
+              //reader.removeEventListener('loadend', loadedCb);
+                let text = 'WEBVTT FILE\\r\\n\\r\\n'.concat(toVTT(buf))
+                let objectUrl = window.URL.createObjectURL(new Blob([text], { type: 'text/vtt' }));
+                 let track = document.createElement("track");
+                 let video = document.getElementsByClassName("dplayer-video")[0];
+                  track.kind = "captions";
+                  track.label = "Chinese";
+                  track.srclang = "cn";
+                  track.src = objectUrl;
+                  track.addEventListener("load", function() {
+                      this.mode = "showing";
+                      video.textTracks[0].mode = "showing";
+                  });
+                  video.appendChild(track);
+                  video.textTracks[0].mode = "showing";
+            };
+            const toVTT = (utf8str) => utf8str
+                .replace(/\\{\\\\([ibu])\\}/g, '</$1>')
+                .replace(/\\{\\\\([ibu])1\\}/g, '<$1>')
+                .replace(/\\{([ibu])\\}/g, '<$1>')
+                .replace(/\\{\\/([ibu])\\}/g, '</$1>')
+                .replace(/(\\d\\d:\\d\\d:\\d\\d),(\\d\\d\\d)/g, '$1.$2')
+                .concat('\\r\\n\\r\\n');
+          const $={};
+          $.ajax = function(options){
+              var type = options.type.toUpperCase() || 'GET';
+              var resDataType = options.resDataType || 'string';
+              var reqDataType = options.reqDataType || 'string';
+              var url = options.url;
+              var data = options.data;
+              var success = options.success;
+              var fail = options.fail;
+              var progress = options.progress;
+              var imgType = options.imgType || 'jpg';
+              var xhr = new XMLHttpRequest();
+              xhr.open(type,url);
+              if(resDataType==='blob'){
+                  xhr.responseType = 'blob';
+              }
+              if(type==='GET'){
+                  xhr.send(null)
+              }
+              else if(type==='POST') {
+                  if(progress){
+                      xhr.upload.onprogress = progress;
+                  }
+                  if(reqDataType==='json'){
+                      xhr.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+                      data = JSON.stringify(data);  //只能发送字符串格式的json,不能直接发送json
+                  }
+                  if(reqDataType==='string'){
+                      xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                  }
+                  xhr.send(data);
+              }
+              xhr.onreadystatechange = function(){
+                  if(this.readyState===4 && (this.status>=200 && this.status<300)){
+                      var res;
+                      if(resDataType==='json'){
+                          res = JSON.parse(this.responseText);
+                          success.call(this,res,this.responseXML)
+                      }
+                      if(resDataType==='blob'){
+                          res = new Blob([this.response],{type:'text/srt'});
+                          success.call(this,res)
+                      }
+          
+                  }
+              };
+          };
+            vttItems&&JSON.parse(vttItems).map(e=>{
+              let vttName = e.file.split("/").pop()
+              let vttNameArr = vttName.split(".");
+              let endfix = vttNameArr[vttNameArr.length-1];
+              if(vttName.split(".")[0] === currentFile.split(".")[0]){
+                  $.ajax({
+                    type:'GET',
+                    url:e.url,
+                    resDataType:'blob',
+                    success:function(resText,resXML){
+                        if(endfix.toLowerCase() == 'srt'){
+                             const reader = new FileReader();
+                            reader.addEventListener('loadend', loadedCb);
+                            let textSrt = reader.readAsText(resText);
+                        }else{
+                            let track = document.createElement("track");
+                           let video = document.getElementsByClassName("dplayer-video")[0];
+                            track.kind = "captions";
+                            track.label = "Chinese";
+                            track.srclang = "cn";
+                            track.src = e.url;
+                            video.appendChild(track);
+                            video.textTracks[0].mode = "showing";
+                        }
+                    },
+                    fail:function(err){
+                       console.log(err)
+                    }
+                  });
+              }
+            })
           })
           
           </script><style>.play-list-choose-one{color: #b9edff}</style>`

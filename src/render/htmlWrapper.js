@@ -22,9 +22,10 @@ const pagination = (pIdx, attrs) => {
   return ''
 }
 
-export function renderHTML(body, pLink, pIdx, cVideoList) {
+export function renderHTML(body, pLink, pIdx, cVideoList, vttList) {
   pLink = pLink || ''
   cVideoList = cVideoList && JSON.stringify(cVideoList)
+  vttList = vttList && JSON.stringify(vttList)
   const p = 'window[pLinkId]'
 
   return `<!DOCTYPE html>
@@ -92,7 +93,6 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
           if(false){//url === "/"
               if(saveLatestVideos){
                 let saveObj = JSON.parse(saveLatestVideos)
-                console.log(saveObj)
                 // Object.keys(saveObj).map(key=>{
                 //     saveObj[key]
                 // })
@@ -159,6 +159,7 @@ export function renderHTML(body, pLink, pIdx, cVideoList) {
         }
         
         '${cVideoList}'!=='undefined'&&localStorage.setItem('videoItems', '${cVideoList}')
+        '${vttList}'!=='undefined'&&localStorage.setItem('vttItems', '${vttList}')
       </script>
     </body>
   </html>`

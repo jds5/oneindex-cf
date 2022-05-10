@@ -57,6 +57,7 @@ export async function renderFolderView(items, path, request) {
   let readmeExists = false
   let readmeFetchUrl = ''
   const currentVideoFiles = []
+  const currentVttFiles = []
   const body = div(
     'container',
     div('path', renderPath(path)) +
@@ -97,6 +98,8 @@ export async function renderFolderView(items, path, request) {
                   fileIcon = 'far fa-file-archive'
                 } else if (['flac', 'oga', 'opus'].includes(extension)) {
                   fileIcon = 'far fa-file-audio'
+                } else if (['srt', 'vtt'].includes(extension)) {
+                  fileIcon = 'far fa-file-subtitle'
                 } else {
                   fileIcon = `far ${getClassNameForFilename(i.name)}`
                 }
@@ -104,18 +107,18 @@ export async function renderFolderView(items, path, request) {
                 fileIcon = `far ${fileIcon}`
               }
               if (fileIcon === 'far fa-file-video') {
-                /**
-                 *  video: {
-              url: '${file['@microsoft.graph.downloadUrl']}',
-              type: '${fileExt}'
-            }
-                 * @type {{name, id: string}}
-                 */
                 const videoObj = {
                   url: `${i['@microsoft.graph.downloadUrl']}`,
                   file: `${path}${i.name}`
                 }
                 currentVideoFiles.push(videoObj)
+              }
+              if (fileIcon === 'far fa-file-subtitle') {
+                const vttObj = {
+                  url: `${i['@microsoft.graph.downloadUrl']}`,
+                  file: `${path}${i.name}`
+                }
+                currentVttFiles.push(vttObj)
               }
               return item(fileIcon, i.name, `${path}${i.name}`, i.size)
             } else {
@@ -129,5 +132,5 @@ export async function renderFolderView(items, path, request) {
     (isIndex ? intro : '')
   )
 
-  return renderHTML(body, ...[request.pLink, request.pIdx], currentVideoFiles)
+  return renderHTML(body, ...[request.pLink, request.pIdx], currentVideoFiles, currentVttFiles)
 }
