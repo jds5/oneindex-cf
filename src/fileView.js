@@ -214,6 +214,25 @@ function renderVideoPlayer(file, fileExt, path) {
                   video.appendChild(track);
                   video.textTracks[0].mode = "showing";
             };
+            
+            const loadedCbAss = (event) => {
+              const buf = (event.target).result;
+              //reader.removeEventListener('loadend', loadedCb);
+                let text = 'WEBVTT FILE\\r\\n\\r\\n'.concat(assToVTT(buf))
+                let objectUrl = window.URL.createObjectURL(new Blob([text], { type: 'text/vtt' }));
+                 let track = document.createElement("track");
+                 let video = document.getElementsByClassName("dplayer-video")[0];
+                  track.kind = "captions";
+                  track.label = "Chinese";
+                  track.srclang = "cn";
+                  track.src = objectUrl;
+                  track.addEventListener("load", function() {
+                      this.mode = "showing";
+                      video.textTracks[0].mode = "showing";
+                  });
+                  video.appendChild(track);
+                  video.textTracks[0].mode = "showing";
+            };
             const toVTT = (utf8str) => utf8str
                 .replace(/\\{\\\\([ibu])\\}/g, '</$1>')
                 .replace(/\\{\\\\([ibu])1\\}/g, '<$1>')
@@ -221,6 +240,29 @@ function renderVideoPlayer(file, fileExt, path) {
                 .replace(/\\{\\/([ibu])\\}/g, '</$1>')
                 .replace(/(\\d\\d:\\d\\d:\\d\\d),(\\d\\d\\d)/g, '$1.$2')
                 .concat('\\r\\n\\r\\n');
+            const assToVTT = (utf8str) => {
+                let assReg = /Dialogue:.*,(\\d+):(\\d{1,2}):(\\d{1,2}\\.?\\d*),\\s*?(\\d+):(\\d{1,2}):(\\d{1,2}\\.?\\d*)(?:.*?,){7}(.+)/
+                 let splite = utf8str.split('\\n');
+                const data = [];
+                let begin = 1;
+                for(let i = 0; i<splite.length; i++){
+                    let line = splite[i];
+                     let match = line.match(assReg);
+                      if (!match){
+                          //console.log('跳过非正文行',line);
+                          continue;
+                      }
+                      let minutes = match[3]?match[3].split("."):[];
+                      let minutes2 = match[6]?match[6].split("."):[];
+                      let newLine = begin+"\\r\\n"+"0"+match[1] + ":" + match[2] + ":" + minutes.join(",")+" --> " 
+                      + "0"+match[4] + ":" + match[5] + ":" + minutes2.join(",") + "\\r\\n" + match[7]
+                      begin = begin+1
+                      data.push(newLine)
+                }
+                
+                let result = data.join('\\r\\n\\r\\n');
+                return result
+            }
           const $={};
           $.ajax = function(options){
               var type = options.type.toUpperCase() || 'GET';
@@ -281,6 +323,10 @@ function renderVideoPlayer(file, fileExt, path) {
                         if(endfix.toLowerCase() == 'srt'){
                              const reader = new FileReader();
                             reader.addEventListener('loadend', loadedCb);
+                            let textSrt = reader.readAsText(resText);
+                        }else if(endfix.toLowerCase() == 'ass'){
+                             const reader = new FileReader();
+                            reader.addEventListener('loadend', loadedCbAss);
                             let textSrt = reader.readAsText(resText);
                         }else{
                             let track = document.createElement("track");

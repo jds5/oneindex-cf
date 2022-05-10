@@ -98,7 +98,7 @@ export async function renderFolderView(items, path, request) {
                   fileIcon = 'far fa-file-archive'
                 } else if (['flac', 'oga', 'opus'].includes(extension)) {
                   fileIcon = 'far fa-file-audio'
-                } else if (['srt', 'vtt'].includes(extension)) {
+                } else if (['srt', 'vtt', 'ass'].includes(extension)) {
                   fileIcon = 'far fa-file-subtitle'
                 } else {
                   fileIcon = `far ${getClassNameForFilename(i.name)}`
