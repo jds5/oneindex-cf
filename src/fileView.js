@@ -234,6 +234,28 @@ function renderVideoPlayer(file, fileExt, path) {
                   video.appendChild(track);
                   video.textTracks[0].mode = "showing";
             };
+            //todo use this convert srt to ignore position info in srt  
+            //srtReg:/(?:(\\d+):)?(\\d{1,2}):(\\d{1,2})[,\\.](\\d{1,3})\\s*(?:-->|,)\\s*(?:(\\d+):)?(\\d{1,2}):(\\d{1,2})[,\\.](\\d{1,3})\\r?\\n([.\\s\\S]+)/,
+            //decodeFromSRT(input){
+            //             if(!input) return;
+            //             const data = [];
+            //             let split = input.split('\\n\\n');
+            //             if(split.length==1) split = input.split('\\r\\n\\r\\n');
+            //             split.forEach(item=>{
+            //                 const match = item.match(this.srtReg);
+            //                 if (!match){
+            //                     //console.log('跳过非正文行',item);
+            //                     return;
+            //                 }
+            //                 data.push({
+            //                     from:(match[1]*60*60||0) + match[2]*60 + (+match[3]) + (match[4]/1000),
+            //                     to:(match[5]*60*60||0) + match[6]*60 + (+match[7]) + (match[8]/1000),
+            //                     content:match[9].trim().replace(/{\\\\.+?}/g,'').replace(/\\\\N/gi,'\\n').replace(/\\\\h/g,' ')
+            //                 });
+            //             });
+            //             return {body:data.sort((a,b)=>a.from-b.from)};
+            //         }
+            //
             const toVTT = (utf8str) => utf8str
                 .replace(/\\{\\\\([ibu])\\}/g, '</$1>')
                 .replace(/\\{\\\\([ibu])1\\}/g, '<$1>')

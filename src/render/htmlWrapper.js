@@ -53,7 +53,7 @@ export function renderHTML(body, pLink, pIdx, cVideoList, vttList) {
     <body>
       <nav id="navbar" data-turbolinks-permanent>
         <div class="brand">📁 yangchm's public onedrive</div>
-        <a href="https://down.megumi.ml" target="_blank" style="display: block; text-align: right; flex: 1;">aria2</a>
+        <a href="https://down.rokano.org" target="_blank" style="display: block; text-align: right; flex: 1;">aria2</a>
         <a href="https://nyaa.si/?f=0&c=1_3&q=" target="_blank" style="display: block; margin-left: 10px; margin-right: 10px;">nyaa</a>
       </nav>
       ${body}
