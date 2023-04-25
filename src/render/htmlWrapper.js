@@ -112,7 +112,7 @@ export function renderHTML(body, pLink, pIdx, cVideoList, vttList) {
                   }
                   let latestVideo = document.getElementById('lastest-video')
                   latestVideo.innerHTML = decodeURI(targetVideo).split("/").pop()
-                  latestVideo.href = 'https://onedrive.megumi.ml/'+targetVideo
+                  latestVideo.href = 'https://onedrive.rokano.org/'+targetVideo
                 }
               }
           }

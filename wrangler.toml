@@ -1,12 +1,12 @@
 name = "onedrive"
-type = "webpack"
+# type = "webpack"
 compatibility_date = "2022-04-11"
 workers_dev = true
 account_id = "19d1ee21414091dfeb1ee5bf64c4f1ef"
-zone_id = "223bde47ebc44c313979b308e58a1d49"
+# zone_id = "223bde47ebc44c313979b308e58a1d49"
 kv_namespaces = [
     { binding = "BUCKET", preview_id = "735a7ab47843476a8361dd7368b6bde7", id = "6586cf0364c042439b2dc2759d329ae6" }
 ]
-
+main = "./src/index.js"
 [env.staging]
 name = "drive-staging"
