@@ -190,15 +190,13 @@ function renderVideoPlayer(file, fileExt, path) {
             }
           })
           dp.on("fullscreen", function(){
-            console.log("try do fullscreen landscape")
             if(screen.orientation && screen.orientation.lock){
-              screen.orientation.lock('landscape')
+              screen.orientation.lock('landscape').catch((e)=>console.log(e))
             }
           })
           dp.on("fullscreen_cancel", function(){
-            console.log("try do cancel fullscreen landscape")
              if(screen.orientation && screen.orientation.lock){
-              screen.orientation.lock('natural')
+              screen.orientation.lock('natural').catch((e)=>console.log(e))
             }
           })
           dp.on("loadedmetadata", function(e){
