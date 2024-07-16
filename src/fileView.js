@@ -189,6 +189,18 @@ function renderVideoPlayer(file, fileExt, path) {
               hasNodes.dispatchEvent(e)  
             }
           })
+          dp.on("fullscreen", function(){
+            console.log("try do fullscreen landscape")
+            if(screen.orientation && screen.orientation.lock){
+              screen.orientation.lock('landscape')
+            }
+          })
+          dp.on("fullscreen_cancel", function(){
+            console.log("try do cancel fullscreen landscape")
+             if(screen.orientation && screen.orientation.lock){
+              screen.orientation.lock('natural')
+            }
+          })
           dp.on("loadedmetadata", function(e){
             console.log(e)
           })
